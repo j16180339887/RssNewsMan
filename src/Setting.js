@@ -9,6 +9,11 @@ import {
   AsyncStorage
 } from 'react-native';
 
+// import parseString from 'xml2js';
+// import DOMParser from 'react-native-html-parser';
+// const DOMParser = require('react-native-html-parser').DOMParser
+var DOMParser = require('xmldom').DOMParser;
+
 export default class Setting extends React.Component {
 
   constructor(props) {
@@ -30,7 +35,85 @@ export default class Setting extends React.Component {
   }
 
   addNewFeed = () => {
-    alert("test")
+    // fetch('https://feeds.feedburner.com/techbang', {method: 'GET'})
+    // .then((response) => {
+      // console.log(JSON.stringify(response, null, 4))
+      // console.log(JSON.stringify(response.text(), null, 4))
+      // const parsed = new DomParser().parseFromString(response.text(), 'text/xml');
+      // console.log(parsed)
+      // parseString(response.text(), {trim: true}, (err, res) => {console.log(err, res)})
+    // })
+    // .catch((error) => {
+      // console.error(error);
+	  // });
+
+    let headers = new Headers({
+      "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0 (Chrome)",
+      "Accept": "*/*",
+    });
+    fetch('http://feedproxy.google.com/~r/techbang/~3/tzMKDYUZPEs/58384-kodak-coin-is-finally-coming-proposed-to-raise-50-million-dollars-expected-to-be-online'
+    ,{method: 'GET', headers : headers , redirect: 'follow', mode: 'cors', cache: 'default', keepalive: true})
+    .then((response) => {
+      // console.log(response)
+      // console.log("--------------------")
+      // console.log("--------------------")
+      // // console.log(response.body())
+      // console.log(response.text())
+      // const parser = new DOMParser();
+      // const parsed = DOMParser.parseFromString(response, 'text/html');
+      // console.log(JSON.stringify(parsed, null, 4))
+      // console.log(parsed.querySelect("meta[property='og:image']").getAttribute("content"))
+    })
+
+    // console.log(headers)
+    this.getImageUrl("http://feedproxy.google.com/~r/techbang/~3/tzMKDYUZPEs/58384-kodak-coin-is-finally-coming-proposed-to-raise-50-million-dollars-expected-to-be-online")
+  }
+
+  getImageUrl = (url) => {
+    console.log(url)
+    let headers = {
+      "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0 (Chrome)",
+      "Accept": "*/*",
+    };
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    Object.keys(headers).map(function(key, index) {
+      xhr.setRequestHeader(key, headers[key]);
+    });
+    // xhr.setRequestHeader("Accept", headers["Accept"]);
+    // xhr.setRequestHeader("Content-Type", headers["Content-Type"]);
+    // xhr.setRequestHeader("Accept-Encoding", headers["accept-encoding"]);
+    xhr.timeout = 2000;
+    xhr.onload = function () {
+      // console.log(xhr.readyState == XMLHttpRequest.DONE)
+      console.log(xhr.readyState)
+      switch (xhr.status) {
+        case 200:
+            console.log(xhr._response)
+            console.log("------------------")
+            // var doc = new DOMParser().parseFromString(xhr._response, "text/html");
+            // console.log(new DOMParser().parseFromString(xhr._response, "text/html"))
+            break;
+
+            default:
+              console.log(xhr.status)
+            break;
+          }
+        }
+    xhr.onreadystatechange = function() {//Call a function when the state changes.
+      console.log("ready", xhr.readyState, XMLHttpRequest.DONE)
+      if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+        console.log("ready2")
+        console.log(xhr)
+      // Request finished. Do processing here.
+      }
+    }
+    xhr.ontimeout = function (e) {
+      console.log("timeout", e)
+    };
+    // console.log(xhr)
+
+    xhr.send();
   }
 
   render() {
@@ -38,9 +121,7 @@ export default class Setting extends React.Component {
       <KeyboardAvoidingView behavior="padding" style={styles.wrapper}>
         <View style={styles.container}>
           <Text style={styles.blueText} >app!</Text>
-          <TextInput
-            style={styles.textInput} placeholder="Input rss"
-            onChangeText={ (rssFeeds) => this.setState({rssFeeds}) } />
+          <TextInput style={styles.textInput} placeholder="Input rss" onChangeText={ (rssFeeds) => this.setState({rssFeeds}) } />
           <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
             <Text>Add Feeds</Text>
           </TouchableOpacity>
