@@ -13,6 +13,7 @@ import {
 // import DOMParser from 'react-native-html-parser';
 // const DOMParser = require('react-native-html-parser').DOMParser
 var DOMParser = require('xmldom').DOMParser;
+import cio from 'cheerio-without-node-native';
 
 export default class Setting extends React.Component {
 
@@ -84,12 +85,22 @@ export default class Setting extends React.Component {
     // xhr.setRequestHeader("Content-Type", headers["Content-Type"]);
     // xhr.setRequestHeader("Accept-Encoding", headers["accept-encoding"]);
     xhr.timeout = 2000;
-    xhr.onload = function () {
+    xhr.onload = () => {
       // console.log(xhr.readyState == XMLHttpRequest.DONE)
       console.log(xhr.readyState)
       switch (xhr.status) {
         case 200:
-            console.log(xhr._response)
+            var html = xhr._response
+            var m;
+
+            do {
+                m = /<meta.*>/.exec(html)
+                if (m && /og:image/.test(m[0])) {
+                    console.log(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(m[0])[0])
+                    // var prop_re = /<meta.*>/g
+                }
+            } while (m);
+            console.log("------------------")
             console.log("------------------")
             // var doc = new DOMParser().parseFromString(xhr._response, "text/html");
             // console.log(new DOMParser().parseFromString(xhr._response, "text/html"))
