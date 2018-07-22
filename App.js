@@ -1,48 +1,51 @@
 import React from 'react';
 import {
-  StyleSheet,
-  Text,
-  View
+    StyleSheet,
+    Text,
+    View
 } from 'react-native';
 
-import { createStackNavigator } from "react-navigation";
+import {
+    createStackNavigator
+} from "react-navigation";
 import Setting from "./src/Setting.js";
 
 const SettingPage = createStackNavigator({
-  Profile: {
-    screen: Setting,
-    navigationOptions: ({ navigation }) => ({
-      title: "hiii",
-      headerTitleStyle :{
-        textAlign: 'center',
-        alignSelf:'center',
-        color: "green",
-        backgroundColor:'black',
-      },
-      headerStyle:{
-        backgroundColor:'black',
-      },
-    }),
-  },
+    Profile: {
+        screen: Setting,
+        navigationOptions: ({
+            navigation
+        }) => ({
+            title: "hiii",
+            headerTitleStyle: {
+                textAlign: 'center',
+                alignSelf: 'center',
+                color: "green",
+                backgroundColor: 'black',
+            },
+            headerStyle: {
+                backgroundColor: 'black',
+            },
+        }),
+    },
 });
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <SettingPage/>
-    );
-  }
+    render() {
+        return ( <SettingPage/>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#222',
-    alignItems: 'center',
-    paddingTop: 20,
-    justifyContent: 'center',
-  },
-  whiteText: {
-    color: "white"
-  }
+    container: {
+        flex: 1,
+        backgroundColor: '#222',
+        alignItems: 'center',
+        paddingTop: 20,
+        justifyContent: 'center',
+    },
+    whiteText: {
+        color: "white"
+    }
 });
