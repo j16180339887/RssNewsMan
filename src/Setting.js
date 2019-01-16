@@ -15,6 +15,7 @@ import * as rssParser from 'react-native-rss-parser';
 // const DOMParser = require('react-native-html-parser').DOMParser
 var DOMParser = require('xmldom').DOMParser;
 import cio from 'cheerio-without-node-native';
+import { resolve } from 'url';
 
 export default class Setting extends React.Component {
 
@@ -53,61 +54,66 @@ export default class Setting extends React.Component {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0 (Chrome)",
             "Accept": "*/*",
         });
-        fetch('http://feedproxy.google.com/~r/techbang/~3/tzMKDYUZPEs/58384-kodak-coin-is-finally-coming-proposed-to-raise-50-million-dollars-expected-to-be-online', {
-                method: 'GET',
-                headers: headers,
-                redirect: 'follow',
-                mode: 'cors',
-                cache: 'default',
-                keepalive: true
-            })
-            .then((response) => {
-                // console.log(response)
-                // console.log("--------------------")
-                // console.log("--------------------")
-                // // console.log(response.body())
-                // console.log(response.text())
-                // const parser = new DOMParser();
-                // const parsed = DOMParser.parseFromString(response, 'text/html');
-                // console.log(JSON.stringify(parsed, null, 4))
-                // console.log(parsed.querySelect("meta[property='og:image']").getAttribute("content"))
-            })
+        // fetch('http://feedproxy.google.com/~r/techbang/~3/tzMKDYUZPEs/58384-kodak-coin-is-finally-coming-proposed-to-raise-50-million-dollars-expected-to-be-online', {
+        //         method: 'GET',
+        //         headers: headers,
+        //         redirect: 'follow',
+        //         mode: 'cors',
+        //         cache: 'default',
+        //         keepalive: true
+        //     })
+        //     .then((response) => {
+        //         // console.log(response)
+        //         // console.log("--------------------")
+        //         // console.log("--------------------")
+        //         // // console.log(response.body())
+        //         // console.log(response.text())
+        //         // const parser = new DOMParser();
+        //         // const parsed = DOMParser.parseFromString(response, 'text/html');
+        //         // console.log(JSON.stringify(parsed, null, 4))
+        //         // console.log(parsed.querySelect("meta[property='og:image']").getAttribute("content"))
+        //     })
 
-        // console.log(headers)
-        // this.getImageUrl("http://feedproxy.google.com/~r/techbang/~3/tzMKDYUZPEs/58384-kodak-coin-is-finally-coming-proposed-to-raise-50-million-dollars-expected-to-be-online")
-        // this.parseFeedsXML("https://feeds.feedburner.com/techbang")
+        var feeds = ["https://feeds.feedburner.com/techbang", "https://technews.tw/tn-rss"]
 
-        fetch('https://feeds.feedburner.com/techbang')
+        Promise
+        .all(feeds.map(this.getArticles))
+    }
+
+    getArticles = (url) =>
+        fetch(url)
         .then((response) => response.text())
         .then((responseData) => rssParser.parse(responseData))
         .then((rss) => {
-            // console.log(rss.title);
-            // console.log(rss.items.length);
-            for(var i in rss.items) {
-                this.getImageUrl(rss.items[i])
-            }
-            // return rss
+            return Promise
+            .all(rss.items.map(this.getImageUrl))
+            .then((imgurl) => {
+                console.log("imgurl:")
+                console.log(imgurl)
+                return imgurl
+            })
         })
-    }
 
-    getImageUrl = (rssitem) => {
+
+    getImageUrl = (rssitem) =>
         fetch(rssitem["links"][0]["url"])
         .then((response) => response.text())
         .then((responseData) => {
             console.log("====================responseData=======================")
             // console.log(responseData)
-            var meta = /<meta.*og:image.*>/.exec(responseData)
+            var meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)
             if (meta) {
                 rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta[0])[0]
-                console.log(rssitem["links"][0]["url"])
-                console.log(rssitem["image"])
-                // return image_url
+                // console.log(rssitem["links"][0]["url"])
+                // console.log(rssitem["image"])
+                // console.log(meta)
+                return (rssitem["image"])
             }
 
             console.log("====================END=======================")
-            // return image_url
+            return ("FFFFaillll!")
         })
-    }
+
 
     // getImageUrl = (url) => {
     //     console.log(url)
