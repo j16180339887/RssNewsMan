@@ -10,12 +10,6 @@ import {
 } from 'react-native';
 
 import * as rssParser from 'react-native-rss-parser';
-// import parseString from 'xml2js';
-// import DOMParser from 'react-native-html-parser';
-// const DOMParser = require('react-native-html-parser').DOMParser
-var DOMParser = require('xmldom').DOMParser;
-import cio from 'cheerio-without-node-native';
-import { resolve } from 'url';
 
 export default class Setting extends React.Component {
 
