@@ -16,16 +16,17 @@ const SettingPage = createStackNavigator({
         navigationOptions: ({
             navigation
         }) => ({
-            title: "hiii",
-            headerTitleStyle: {
-                textAlign: 'center',
-                alignSelf: 'center',
-                color: "green",
-                backgroundColor: 'black',
-            },
-            headerStyle: {
-                backgroundColor: 'black',
-            },
+            header: null
+            // title: "hiii",
+            // headerTitleStyle: {
+            //     textAlign: 'center',
+            //     alignSelf: 'center',
+            //     color: "green",
+            //     backgroundColor: 'black',
+            // },
+            // headerStyle: {
+            //     backgroundColor: 'black',
+            // },
         }),
     },
 });

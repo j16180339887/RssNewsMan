@@ -3,6 +3,7 @@ import {
     StyleSheet,
     Text,
     View,
+    ScrollView,
     Image,
     TextInput,
     KeyboardAvoidingView,
@@ -50,9 +51,9 @@ export default class Setting extends React.Component {
         var feeds = [
             "https://feeds.feedburner.com/techbang",
             "https://technews.tw/tn-rss",
-            "https://www.gamebase.com.tw/news/rss/0",
-            "http://news.everydayhealth.com.tw/feed",
-            "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"
+            // "https://www.gamebase.com.tw/news/rss/0",
+            // "http://news.everydayhealth.com.tw/feed",
+            // "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"
         ]
 
         Promise
@@ -62,7 +63,8 @@ export default class Setting extends React.Component {
             console.log(rssitem.length)
             // console.log(rssitem[0][0])
             this.setState({
-                rssLinks: [].concat(...rssitem).filter(e => e!=null)
+                rssLinks: [].concat(...rssitem)
+                            .filter(e => e != null && e["image"])
             })
         })
         .catch((err) => {
@@ -98,9 +100,9 @@ export default class Setting extends React.Component {
                 // console.log(rssitem["links"][0]["url"])
                 // console.log(rssitem["image"])
                 // console.log(rssitem)
+                console.log("====================END=======================")
                 return rssitem
             }
-            console.log("====================END=======================")
             return {}
         })
         .catch((err) => {
@@ -109,20 +111,16 @@ export default class Setting extends React.Component {
 
     render() {
         if (this.state.rssLinks.length !== 0) {
-            // return (<View style={styles.container}>
-            //             <Image style={{width: 50, height: 50}} source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}} />
-            //         </View>
-            // )
             return (
-                <View style={styles.container}>
-                    { this.state.rssLinks.map((rssLink) => {
+                <ScrollView style={styles.scrollview}>
+                    { this.state.rssLinks.map((rssLink, i) => {
                         console.log(rssLink["image"])
                         if (rssLink["image"]) {
-                            return <Image source={{uri: rssLink["image"]}} style={{width: 250, height: 100}} />
+                            return <Image key={i} source={{uri: rssLink["image"]}} style={styles.img} />
                         }
                         return <Text></Text>
                     }) }
-                 </View>
+                 </ScrollView>
             )
         }
         return (
@@ -136,7 +134,7 @@ export default class Setting extends React.Component {
                 </View>
             </KeyboardAvoidingView>
           )
-        }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -165,5 +163,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#01c853',
         padding: 20,
         alignItems: "center"
+    },
+    img: {
+        width: 300,
+        height: 200
+    },
+    scrollview: {
+        paddingVertical: 20
     }
 });
