@@ -33,10 +33,10 @@ export default class Setting extends React.Component {
 
     addNewFeed = () => {
 
-        let headers = new Headers({
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0 (Chrome)",
-            "Accept": "*/*",
-        });
+        // let headers = new Headers({
+        //     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0 (Chrome)",
+        //     "Accept": "*/*",
+        // });
         // fetch('http://feedproxy.google.com/~r/techbang/~3/tzMKDYUZPEs/58384-kodak-coin-is-finally-coming-proposed-to-raise-50-million-dollars-expected-to-be-online', {
         //         method: 'GET',
         //         headers: headers,
@@ -51,21 +51,21 @@ export default class Setting extends React.Component {
             "https://technews.tw/tn-rss",
             "https://www.gamebase.com.tw/news/rss/0",
             "http://news.everydayhealth.com.tw/feed",
-            // "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"
+            "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"
         ]
 
         Promise
         .all(feeds.map(this.getArticles))
         .then((rssitem) => {
             console.log("All done!")
-            // console.log(rssitem)
+            console.log(rssitem.length)
         })
         .catch((err) => {
             console.log(err)
         })
     }
 
-    getArticles = (url) =>
+    getArticles = url =>
         fetch(url)
         .then((response) => response.text())
         .then((responseData) => rssParser.parse(responseData))
@@ -81,7 +81,7 @@ export default class Setting extends React.Component {
         })
 
 
-    getImageUrl = (rssitem) =>
+    getImageUrl = rssitem =>
         fetch(rssitem["links"][0]["url"])
         .then((response) => response.text())
         .then((responseData) => {
