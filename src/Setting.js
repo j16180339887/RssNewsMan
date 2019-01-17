@@ -4,7 +4,7 @@ import {
     Text,
     View,
     ScrollView,
-    Image,
+    ImageBackground,
     TextInput,
     KeyboardAvoidingView,
     TouchableOpacity,
@@ -116,7 +116,14 @@ export default class Setting extends React.Component {
                     { this.state.rssLinks.map((rssLink, i) => {
                         console.log(rssLink["image"])
                         if (rssLink["image"]) {
-                            return <Image key={i} source={{uri: rssLink["image"]}} style={styles.img} />
+                            return (
+                                <ImageBackground key={i} source={{uri: rssLink["image"]}} style={styles.img} >
+                                    <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} ></View>
+                                    <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}>
+                                        <Text style={styles.imgText}>{rssLink["title"]}</Text>
+                                    </View>
+                                </ImageBackground>
+                            )
                         }
                         return <Text></Text>
                     }) }
@@ -165,8 +172,14 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img: {
-        width: 300,
-        height: 200
+        width: '100%',
+        aspectRatio: 1,
+        opacity: 0.6
+    },
+    imgText: {
+        color: '#FFF',
+        fontSize: 24,
+        fontWeight: 'bold'
     },
     scrollview: {
         paddingVertical: 20
