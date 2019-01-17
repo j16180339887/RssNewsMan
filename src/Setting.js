@@ -36,35 +36,26 @@ export default class Setting extends React.Component {
 
     addNewFeed = () => {
 
-        // let headers = new Headers({
-        //     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0 (Chrome)",
-        //     "Accept": "*/*",
-        // });
-        // fetch('http://feedproxy.google.com/~r/techbang/~3/tzMKDYUZPEs/58384-kodak-coin-is-finally-coming-proposed-to-raise-50-million-dollars-expected-to-be-online', {
-        //         method: 'GET',
-        //         headers: headers,
-        //         redirect: 'follow',
-        //         mode: 'cors',
-        //         cache: 'default',
-        //         keepalive: true
-        //     })
+        var feeds = [{link: "https://feeds.feedburner.com/techbang",},
+                    {link: "https://technews.tw/tn-rss"},
+                    {link: "https://www.gamebase.com.tw/news/rss/0"},
+                    {link: "http://news.everydayhealth.com.tw/feed"},
+                    {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
+        ].map(feed => {
+            feed["available"] = true
+            return feed
+        })
 
-        var feeds = [
-            "https://feeds.feedburner.com/techbang",
-            "https://technews.tw/tn-rss",
-            // "https://www.gamebase.com.tw/news/rss/0",
-            // "http://news.everydayhealth.com.tw/feed",
-            // "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"
-        ]
+        console.log(feeds)
 
         Promise
         .all(feeds.map(this.getArticles))
-        .then((rssitem) => {
+        .then((rssitems) => {
             console.log("All done!")
-            console.log(rssitem.length)
-            // console.log(rssitem[0][0])
+            console.log(rssitems.length)
+            console.log(feeds)
             this.setState({
-                rssLinks: [].concat(...rssitem)
+                rssLinks: [].concat(...rssitems)
                             .filter(e => e != null && e["image"])
             })
         })
@@ -74,18 +65,22 @@ export default class Setting extends React.Component {
     }
 
     getArticles = url =>
-        fetch(url)
+        fetch(url["link"])
         .then((response) => response.text())
         .then((responseData) => rssParser.parse(responseData))
         .then((rss) =>
             Promise
             .all(rss.items.map(this.getImageUrl))
             .then((rssitem) => {
+                if (rssitem.filter(e => e["error"]).length > 0) {
+                    url["available"] = false
+                }
                 return rssitem
             })
         )
         .catch((err) => {
             console.log(err)
+            url["available"] = false
         })
 
 
@@ -108,22 +103,21 @@ export default class Setting extends React.Component {
         })
         .catch((err) => {
             console.log(err)
+            rssitem["error"] = true
+            return rssitem
         })
-
-    setClipboard = (text) => Clipboard.setString(text)
 
     render() {
         if (this.state.rssLinks.length !== 0) {
             return (
                 <ScrollView style={styles.scrollview}>
                     { this.state.rssLinks.map((rssLink, i) => {
-                        console.log(rssLink["image"])
                         return (
                             <ImageBackground key={i} source={{uri: rssLink["image"]}} style={styles.img} >
                                 <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} ></View>
                                 <TouchableOpacity
                                     style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}
-                                    onPress={()=> this.setClipboard(rssLink["links"][0]["url"])} >
+                                    onPress={()=> Clipboard.setString(rssLink["links"][0]["url"])} >
                                         <Text style={styles.imgText}>{rssLink["title"]} </Text>
                                 </TouchableOpacity>
                             </ImageBackground>
