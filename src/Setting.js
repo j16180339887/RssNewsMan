@@ -8,6 +8,7 @@ import {
     TextInput,
     KeyboardAvoidingView,
     TouchableOpacity,
+    Clipboard,
     AsyncStorage
 } from 'react-native';
 
@@ -109,23 +110,24 @@ export default class Setting extends React.Component {
             console.log(err)
         })
 
+    setClipboard = (text) => Clipboard.setString(text)
+
     render() {
         if (this.state.rssLinks.length !== 0) {
             return (
                 <ScrollView style={styles.scrollview}>
                     { this.state.rssLinks.map((rssLink, i) => {
                         console.log(rssLink["image"])
-                        if (rssLink["image"]) {
-                            return (
-                                <ImageBackground key={i} source={{uri: rssLink["image"]}} style={styles.img} >
-                                    <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} ></View>
-                                    <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}>
-                                        <Text style={styles.imgText}>{rssLink["title"]}</Text>
-                                    </View>
-                                </ImageBackground>
-                            )
-                        }
-                        return <Text></Text>
+                        return (
+                            <ImageBackground key={i} source={{uri: rssLink["image"]}} style={styles.img} >
+                                <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} ></View>
+                                <TouchableOpacity
+                                    style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}
+                                    onPress={()=> this.setClipboard(rssLink["links"][0]["url"])} >
+                                        <Text style={styles.imgText}>{rssLink["title"]} </Text>
+                                </TouchableOpacity>
+                            </ImageBackground>
+                        )
                     }) }
                  </ScrollView>
             )
