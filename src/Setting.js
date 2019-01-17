@@ -3,6 +3,7 @@ import {
     StyleSheet,
     Text,
     View,
+    Image,
     TextInput,
     KeyboardAvoidingView,
     TouchableOpacity,
@@ -16,7 +17,7 @@ export default class Setting extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rssFeeds: "https://feeds.feedburner.com/techbang"
+            rssLinks: []
         }
     }
 
@@ -59,6 +60,10 @@ export default class Setting extends React.Component {
         .then((rssitem) => {
             console.log("All done!")
             console.log(rssitem.length)
+            // console.log(rssitem[0][0])
+            this.setState({
+                rssLinks: [].concat(...rssitem).filter(e => e!=null)
+            })
         })
         .catch((err) => {
             console.log(err)
@@ -103,6 +108,23 @@ export default class Setting extends React.Component {
         })
 
     render() {
+        if (this.state.rssLinks.length !== 0) {
+            // return (<View style={styles.container}>
+            //             <Image style={{width: 50, height: 50}} source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}} />
+            //         </View>
+            // )
+            return (
+                <View style={styles.container}>
+                    { this.state.rssLinks.map((rssLink) => {
+                        console.log(rssLink["image"])
+                        if (rssLink["image"]) {
+                            return <Image source={{uri: rssLink["image"]}} style={{width: 250, height: 100}} />
+                        }
+                        return <Text></Text>
+                    }) }
+                 </View>
+            )
+        }
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.wrapper}>
                 <View style={styles.container}>
@@ -113,7 +135,7 @@ export default class Setting extends React.Component {
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
-          );
+          )
         }
 }
 
