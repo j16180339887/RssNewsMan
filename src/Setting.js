@@ -110,10 +110,11 @@ export default class Setting extends React.Component {
     render() {
         if (this.state.rssLinks.length !== 0) {
             return (
-                <ScrollView style={styles.scrollview}>
+                <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent}>
                     { this.state.rssLinks.map((rssLink, i) => {
                         return (
-                            <ImageBackground key={i} source={{uri: rssLink["image"]}} style={styles.img} >
+                            <View key={i} style={styles.imgBackground}>
+                            <ImageBackground source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}}>
                                 <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} ></View>
                                 <TouchableOpacity
                                     style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}
@@ -121,6 +122,7 @@ export default class Setting extends React.Component {
                                         <Text style={styles.imgText}>{rssLink["title"]} </Text>
                                 </TouchableOpacity>
                             </ImageBackground>
+                            </View>
                         )
                     }) }
                  </ScrollView>
@@ -178,6 +180,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     scrollview: {
-        paddingVertical: 20
-    }
+        // paddingVertical: 20,
+        // justifyContent: 'center',
+        // alignItems: 'center'
+    },
+    imgBackground: {
+        flexGrow: 1,
+        width: '90%',
+    },
 });
