@@ -131,11 +131,11 @@ export default class Setting extends React.Component {
     render() {
         if (this.state.rssLinks.length !== 0) {
             return (
-                <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent}>
+                <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent} removeclippedsubviews={true}>
                     { this.state.rssLinks.map((rssLink, i) => {
                         return (
                             <View key={i} style={styles.imgBackground}>
-                            <ImageBackground source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}}>
+                            <ImageBackground source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}} resizemethod="resize">
                                 <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} ></View>
                                 <TouchableOpacity
                                     style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}
