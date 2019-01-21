@@ -28,7 +28,7 @@ export default class Setting extends React.Component {
     }
 
     _loadInitState = async () => {
-        var rssFeeds = await AsyncStorage.getItem("rssFeeds");
+        let rssFeeds = await AsyncStorage.getItem("rssFeeds");
         if (rssFeeds !== null) {
             this.props.navigation.navigate("Profile");
         }
@@ -36,7 +36,7 @@ export default class Setting extends React.Component {
 
     addNewFeed = () => {
 
-        var feeds = [
+        let feeds = [
             {link: "https://feeds.feedburner.com/techbang"},
             {link: "https://www.gamebase.com.tw/news/rss/0"},
             {link: "http://news.everydayhealth.com.tw/feed"},
@@ -111,7 +111,7 @@ export default class Setting extends React.Component {
         .then((responseData) => {
             console.log("====================responseData=======================")
             // console.log(responseData)
-            var meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)
+            let meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)
             if (meta) {
                 rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta[0])[0].replace(/&amp;/g, '&')
                 // console.log(rssitem["links"][0]["url"])
