@@ -4,7 +4,7 @@ import {
     Text,
     View,
     ScrollView,
-    ImageBackground,
+    Image,
     TextInput,
     KeyboardAvoidingView,
     TouchableOpacity,
@@ -135,14 +135,14 @@ export default class Setting extends React.Component {
                     { this.state.rssLinks.map((rssLink, i) => {
                         return (
                             <View key={i} style={styles.imgBackground}>
-                            <ImageBackground source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}} resizemethod="resize">
-                                <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} ></View>
+                            <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} >
+                                <Image source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}} resizemethod="resize"/>
+                            </View>
                                 <TouchableOpacity
                                     style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}
                                     onPress={()=> Clipboard.setString(rssLink["links"][0]["url"])} >
-                                        <Text style={styles.imgText}>{rssLink["title"]} </Text>
+                                        <Text style={styles.imgText}>{rssLink["title"]}</Text>
                                 </TouchableOpacity>
-                            </ImageBackground>
                             </View>
                         )
                     }) }
