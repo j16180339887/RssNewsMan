@@ -36,11 +36,32 @@ export default class Setting extends React.Component {
 
     addNewFeed = () => {
 
-        var feeds = [{link: "https://feeds.feedburner.com/techbang",},
-                    {link: "https://technews.tw/tn-rss"},
-                    {link: "https://www.gamebase.com.tw/news/rss/0"},
-                    {link: "http://news.everydayhealth.com.tw/feed"},
-                    {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
+        var feeds = [
+            {link: "https://feeds.feedburner.com/techbang"},
+            {link: "https://www.gamebase.com.tw/news/rss/0"},
+            {link: "http://news.everydayhealth.com.tw/feed"},
+            {link: "https://feeds.feedburner.com/engadget/cstb"},
+            {link: "https://technews.tw/tn-rss/"},
+            {link: "https://feeds.feedburner.com/pcadv"},
+            {link: "https://feeds.feedburner.com/cool3c-show"},
+            {link: "https://www.ithome.com.tw/rss"},
+            {link: "https://www.kocpc.com.tw/feed"},
+            {link: "http://techcrunch.cn/feed"},
+            {link: "http://www.azofreeware.com/feeds/posts/default"},
+            {link: "https://ithelp.ithome.com.tw/rss/articles/tech"},
+            {link: "https://www.kocpc.com.tw/feed"},
+            {link: "http://www.oschina.net/news/rss"},
+            {link: "https://linux.cn/rss.xml"},
+            {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
+            {link: "https://feeds.feedburner.com/d0od"},
+            {link: "https://www.phoronix.com/rss.php"},
+            {link: "https://feeds.feedburner.com/engadget"},
+            {link: "https://feeds.feedburner.com/TechCrunch"},
+            {link: "https://opensource.com/feed"},
+            {link: "https://feeds.feedburner.com/linuxtoday/linux"},
+            {link: "https://blog.qt.io/feed"},
+            {link: "https://godotengine.org/rss.xml"},
+            {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
         ].map(feed => {
             feed["available"] = true
             return feed
@@ -134,7 +155,7 @@ export default class Setting extends React.Component {
                     <Text style={styles.blueText} >app!</Text>
                     <TextInput style={styles.textInput} placeholder="Input rss" onChangeText={ (rssFeeds) => this.setState({rssFeeds}) } />
                     <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
-                    <Text>Add Feeds</Text>
+                    <Text>☰   ↻   ↺   ⌕  ⌖</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
@@ -186,6 +207,6 @@ const styles = StyleSheet.create({
     },
     imgBackground: {
         flexGrow: 1,
-        width: '90%',
+        width: '100%',
     },
 });
