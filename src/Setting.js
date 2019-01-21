@@ -113,7 +113,7 @@ export default class Setting extends React.Component {
             // console.log(responseData)
             var meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)
             if (meta) {
-                rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta[0])[0]
+                rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta[0])[0].replace(/&amp;/g, '&')
                 // console.log(rssitem["links"][0]["url"])
                 // console.log(rssitem["image"])
                 // console.log(rssitem)
