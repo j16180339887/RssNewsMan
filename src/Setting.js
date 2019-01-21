@@ -133,8 +133,13 @@ export default class Setting extends React.Component {
             return (
                 <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent} removeclippedsubviews={true}>
                     { this.state.rssLinks.map((rssLink, i) => {
+                        console.log({
+                            link: rssLink["links"][0]["url"],
+                            img: rssLink["image"],
+                            title: rssLink["title"]
+                        })
                         return (
-                            <View key={i} style={styles.imgBackground}>
+                            <View key={i}>
                             <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} >
                                 <Image source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}} resizemethod="resize"/>
                             </View>
@@ -191,7 +196,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     img: {
-        width: '100%',
+        width: '90%',
         aspectRatio: 1,
         opacity: 0.6
     },
@@ -204,9 +209,5 @@ const styles = StyleSheet.create({
         // paddingVertical: 20,
         // justifyContent: 'center',
         // alignItems: 'center'
-    },
-    imgBackground: {
-        flexGrow: 1,
-        width: '100%',
     },
 });
