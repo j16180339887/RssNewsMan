@@ -38,30 +38,30 @@ export default class Setting extends React.Component {
 
         let feeds = [
             {link: "https://feeds.feedburner.com/techbang"},
-            {link: "https://www.gamebase.com.tw/news/rss/0"},
-            {link: "http://news.everydayhealth.com.tw/feed"},
-            {link: "https://feeds.feedburner.com/engadget/cstb"},
-            {link: "https://technews.tw/tn-rss/"},
-            {link: "https://feeds.feedburner.com/pcadv"},
-            {link: "https://feeds.feedburner.com/cool3c-show"},
-            {link: "https://www.ithome.com.tw/rss"},
-            {link: "https://www.kocpc.com.tw/feed"},
-            {link: "http://techcrunch.cn/feed"},
-            {link: "http://www.azofreeware.com/feeds/posts/default"},
-            {link: "https://ithelp.ithome.com.tw/rss/articles/tech"},
-            {link: "https://www.kocpc.com.tw/feed"},
-            {link: "http://www.oschina.net/news/rss"},
-            {link: "https://linux.cn/rss.xml"},
-            {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
-            {link: "https://feeds.feedburner.com/d0od"},
-            {link: "https://www.phoronix.com/rss.php"},
-            {link: "https://feeds.feedburner.com/engadget"},
-            {link: "https://feeds.feedburner.com/TechCrunch"},
-            {link: "https://opensource.com/feed"},
-            {link: "https://feeds.feedburner.com/linuxtoday/linux"},
-            {link: "https://blog.qt.io/feed"},
-            {link: "https://godotengine.org/rss.xml"},
-            {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
+            // {link: "https://www.gamebase.com.tw/news/rss/0"},
+            // {link: "http://news.everydayhealth.com.tw/feed"},
+            // {link: "https://feeds.feedburner.com/engadget/cstb"},
+            // {link: "https://technews.tw/tn-rss/"},
+            // {link: "https://feeds.feedburner.com/pcadv"},
+            // {link: "https://feeds.feedburner.com/cool3c-show"},
+            // {link: "https://www.ithome.com.tw/rss"},
+            // {link: "https://www.kocpc.com.tw/feed"},
+            // {link: "http://techcrunch.cn/feed"},
+            // {link: "http://www.azofreeware.com/feeds/posts/default"},
+            // {link: "https://ithelp.ithome.com.tw/rss/articles/tech"},
+            // {link: "https://www.kocpc.com.tw/feed"},
+            // {link: "http://www.oschina.net/news/rss"},
+            // {link: "https://linux.cn/rss.xml"},
+            // {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
+            // {link: "https://feeds.feedburner.com/d0od"},
+            // {link: "https://www.phoronix.com/rss.php"},
+            // {link: "https://feeds.feedburner.com/engadget"},
+            // {link: "https://feeds.feedburner.com/TechCrunch"},
+            // {link: "https://opensource.com/feed"},
+            // {link: "https://feeds.feedburner.com/linuxtoday/linux"},
+            // {link: "https://blog.qt.io/feed"},
+            // {link: "https://godotengine.org/rss.xml"},
+            // {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
         ].map(feed => {
             feed["available"] = true
             return feed
@@ -111,9 +111,9 @@ export default class Setting extends React.Component {
         .then((responseData) => {
             console.log("====================responseData=======================")
             // console.log(responseData)
-            let meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)
+            let meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)[0]
             if (meta) {
-                rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta[0])[0].replace(/&amp;/g, '&')
+                rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta)[0].replace(/&amp;/g, '&')
                 // console.log(rssitem["links"][0]["url"])
                 // console.log(rssitem["image"])
                 // console.log(rssitem)
@@ -129,8 +129,11 @@ export default class Setting extends React.Component {
         })
 
     render() {
-        if (this.state.rssLinks.length !== 0) {
-            return (
+        return (
+            <View style={{flex: 1, justifyContent:'center', alignItems: 'center', width: '100%'}}>
+                <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
+                    <Text>☰   ↻   ↺   ⌕  ⌖</Text>
+                </TouchableOpacity>
                 <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent} removeclippedsubviews={true}>
                     { this.state.rssLinks.map((rssLink, i) => {
                         console.log({
@@ -139,9 +142,9 @@ export default class Setting extends React.Component {
                             title: rssLink["title"]
                         })
                         return (
-                            <View key={i}>
+                            <View key={i} style={{width: '98%', alignItems: 'center', justifyContent: 'center', flex: 1, alignSelf: 'center'}}>
                             <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} >
-                                <Image source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}} resizemethod="resize"/>
+                                <Image source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}}/>
                             </View>
                                 <TouchableOpacity
                                     style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}
@@ -151,9 +154,9 @@ export default class Setting extends React.Component {
                             </View>
                         )
                     }) }
-                 </ScrollView>
-            )
-        }
+                    </ScrollView>
+                </View>
+        )
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.wrapper}>
                 <View style={styles.container}>
@@ -190,13 +193,16 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     btn: {
-        alignSelf: 'stretch',
+        alignSelf: 'center',
         backgroundColor: '#01c853',
         padding: 20,
-        alignItems: "center"
+        alignItems: "center",
+        width: '100%'
     },
     img: {
-        width: '90%',
+        flex: 1,
+        width: '100%',
+        resizeMode: Image.contain,
         aspectRatio: 1,
         opacity: 0.6
     },
@@ -209,5 +215,10 @@ const styles = StyleSheet.create({
         // paddingVertical: 20,
         // justifyContent: 'center',
         // alignItems: 'center'
+        // flex: 1
+    },
+    scrollviewContent: {
+        justifyContent: 'center',
+        flexGrow: 1
     },
 });
