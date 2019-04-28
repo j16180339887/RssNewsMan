@@ -38,30 +38,30 @@ export default class Setting extends React.Component {
 
         let feeds = [
             {link: "https://feeds.feedburner.com/techbang"},
-            // {link: "https://www.gamebase.com.tw/news/rss/0"},
-            // {link: "http://news.everydayhealth.com.tw/feed"},
-            // {link: "https://feeds.feedburner.com/engadget/cstb"},
-            // {link: "https://technews.tw/tn-rss/"},
-            // {link: "https://feeds.feedburner.com/pcadv"},
-            // {link: "https://feeds.feedburner.com/cool3c-show"},
-            // {link: "https://www.ithome.com.tw/rss"},
-            // {link: "https://www.kocpc.com.tw/feed"},
-            // {link: "http://techcrunch.cn/feed"},
-            // {link: "http://www.azofreeware.com/feeds/posts/default"},
-            // {link: "https://ithelp.ithome.com.tw/rss/articles/tech"},
-            // {link: "https://www.kocpc.com.tw/feed"},
-            // {link: "http://www.oschina.net/news/rss"},
-            // {link: "https://linux.cn/rss.xml"},
-            // {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
-            // {link: "https://feeds.feedburner.com/d0od"},
-            // {link: "https://www.phoronix.com/rss.php"},
-            // {link: "https://feeds.feedburner.com/engadget"},
-            // {link: "https://feeds.feedburner.com/TechCrunch"},
-            // {link: "https://opensource.com/feed"},
-            // {link: "https://feeds.feedburner.com/linuxtoday/linux"},
-            // {link: "https://blog.qt.io/feed"},
-            // {link: "https://godotengine.org/rss.xml"},
-            // {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
+            {link: "https://www.gamebase.com.tw/news/rss/0"},
+            {link: "http://news.everydayhealth.com.tw/feed"},
+            {link: "https://feeds.feedburner.com/engadget/cstb"},
+            {link: "https://technews.tw/tn-rss/"},
+            {link: "https://feeds.feedburner.com/pcadv"},
+            {link: "https://feeds.feedburner.com/cool3c-show"},
+            {link: "https://www.ithome.com.tw/rss"},
+            {link: "https://www.kocpc.com.tw/feed"},
+            {link: "http://techcrunch.cn/feed"},
+            {link: "http://www.azofreeware.com/feeds/posts/default"},
+            {link: "https://ithelp.ithome.com.tw/rss/articles/tech"},
+            {link: "https://www.kocpc.com.tw/feed"},
+            {link: "http://www.oschina.net/news/rss"},
+            {link: "https://linux.cn/rss.xml"},
+            {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
+            {link: "https://feeds.feedburner.com/d0od"},
+            {link: "https://www.phoronix.com/rss.php"},
+            {link: "https://feeds.feedburner.com/engadget"},
+            {link: "https://feeds.feedburner.com/TechCrunch"},
+            {link: "https://opensource.com/feed"},
+            {link: "https://feeds.feedburner.com/linuxtoday/linux"},
+            {link: "https://blog.qt.io/feed"},
+            {link: "https://godotengine.org/rss.xml"},
+            {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
         ].map(feed => {
             feed["available"] = true
             return feed
@@ -142,7 +142,7 @@ export default class Setting extends React.Component {
                             title: rssLink["title"]
                         })
                         return (
-                            <View key={i} style={{width: '98%', alignItems: 'center', justifyContent: 'center', flex: 1, alignSelf: 'center'}}>
+                            <View key={i} style={{width: '98%', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flex: 1, alignSelf: 'center'}}>
                             <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} >
                                 <Image source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}}/>
                             </View>
