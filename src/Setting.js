@@ -48,8 +48,6 @@ export default class Setting extends React.Component {
             {link: "https://www.kocpc.com.tw/feed"},
             {link: "http://techcrunch.cn/feed"},
             {link: "http://www.azofreeware.com/feeds/posts/default"},
-            {link: "https://ithelp.ithome.com.tw/rss/articles/tech"},
-            {link: "https://www.kocpc.com.tw/feed"},
             {link: "http://www.oschina.net/news/rss"},
             {link: "https://linux.cn/rss.xml"},
             {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
@@ -58,10 +56,7 @@ export default class Setting extends React.Component {
             {link: "https://feeds.feedburner.com/engadget"},
             {link: "https://feeds.feedburner.com/TechCrunch"},
             {link: "https://opensource.com/feed"},
-            {link: "https://feeds.feedburner.com/linuxtoday/linux"},
-            {link: "https://blog.qt.io/feed"},
-            {link: "https://godotengine.org/rss.xml"},
-            {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"}
+            {link: "https://feeds.feedburner.com/linuxtoday/linux"}
         ].map(feed => {
             feed["available"] = true
             return feed
