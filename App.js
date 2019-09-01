@@ -5,35 +5,35 @@ import {
     View
 } from 'react-native';
 
-import {
-    createStackNavigator
-} from "react-navigation";
+// import {
+//     createStackNavigator
+// } from "react-navigation";
 import Setting from "./src/Setting.js";
 
-const SettingPage = createStackNavigator({
-    Profile: {
-        screen: Setting,
-        navigationOptions: ({
-            navigation
-        }) => ({
-            header: null
-            // title: "hiii",
-            // headerTitleStyle: {
-            //     textAlign: 'center',
-            //     alignSelf: 'center',
-            //     color: "green",
-            //     backgroundColor: 'black',
-            // },
-            // headerStyle: {
-            //     backgroundColor: 'black',
-            // },
-        }),
-    },
-});
+// const SettingPage = createStackNavigator({
+//     Profile: {
+//         screen: Setting,
+//         navigationOptions: ({
+//             navigation
+//         }) => ({
+//             header: null
+//             // title: "hiii",
+//             // headerTitleStyle: {
+//             //     textAlign: 'center',
+//             //     alignSelf: 'center',
+//             //     color: "green",
+//             //     backgroundColor: 'black',
+//             // },
+//             // headerStyle: {
+//             //     backgroundColor: 'black',
+//             // },
+//         }),
+//     },
+// });
 
 export default class App extends React.Component {
     render() {
-        return ( <SettingPage/>
+        return ( <Setting/>
         );
     }
 }
