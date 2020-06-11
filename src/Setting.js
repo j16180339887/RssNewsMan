@@ -127,7 +127,7 @@ export default class Setting extends React.Component {
         return (
             <View style={{flex: 1, justifyContent:'center', alignItems: 'center', width: '100%'}}>
                 <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
-                    <Text>☰   ↻   ↺   ⌕  ⌖</Text>
+                    <Text>Fetch news</Text>
                 </TouchableOpacity>
                 <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent} removeclippedsubviews={true}>
                     { this.state.rssLinks.map((rssLink, i) => {
