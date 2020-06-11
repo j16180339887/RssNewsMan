@@ -37,10 +37,11 @@ export default class Setting extends React.Component {
     addNewFeed = () => {
 
         let feeds = [
-            {link: "https://feeds.feedburner.com/techbang"},
+            {link: "https://www.infoq.cn/feed"},
             {link: "https://www.gamebase.com.tw/news/rss/0"},
-            {link: "http://news.everydayhealth.com.tw/feed"},
-            {link: "https://feeds.feedburner.com/engadget/cstb"},
+            {link: "https://www.ithome.com.tw/rss"},
+            {link: "http://www.oschina.net/news/rss"},
+            {link: "https://mshibanami.github.io/GitHubTrendingRSS/weekly/all.xml"},
             // {link: "https://technews.tw/tn-rss/"},
             // {link: "https://feeds.feedburner.com/pcadv"},
             // {link: "https://feeds.feedburner.com/cool3c-show"},
@@ -67,12 +68,16 @@ export default class Setting extends React.Component {
         Promise
         .all(feeds.map(this.getArticles))
         .then((rssitems) => {
-            console.log("All done!")
-            console.log(rssitems.length)
             console.log(feeds)
+            console.log("All done!")
+            console.log(rssitems.length + " articles fetched")
+
             this.setState({
+                // shuffle and take top 50 articles
                 rssLinks: [].concat(...rssitems)
                             .filter(e => e != null && e["image"])
+                            .sort( () => Math.random() - 0.5 )
+                            .slice(0, 50)
             })
         })
         .catch((err) => {
@@ -125,7 +130,7 @@ export default class Setting extends React.Component {
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent:'center', alignItems: 'center', width: '100%'}}>
+            <View style={{flex: 1, justifyContent:'center', alignItems: 'center', width: '100%', backgroundColor: "#333"}}>
                 <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
                     <Text>Fetch news</Text>
                 </TouchableOpacity>

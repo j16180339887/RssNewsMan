@@ -33,8 +33,7 @@ import Setting from "./src/Setting.js";
 
 export default class App extends React.Component {
     render() {
-        return ( <Setting/>
-        );
+        return ( <Setting /> );
     }
 }
 
@@ -48,5 +47,5 @@ const styles = StyleSheet.create({
     },
     whiteText: {
         color: "white"
-    }
+    },
 });
