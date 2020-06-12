@@ -65,24 +65,71 @@ export default class Setting extends React.Component {
 
         console.log(feeds)
 
-        Promise
-        .all(feeds.map(this.getArticles))
-        .then((rssitems) => {
-            console.log(feeds)
-            console.log("All done!")
-            console.log(rssitems.length + " articles fetched")
+        let cachedRss = async () => {
+            try {
+                let rsstime = await AsyncStorage.getItem('rsstime')
+                // cache an hour of news
+                if (rsstime && (new Date()).getTime() - parseInt(rsstime) < 3600000 ) {
+                    return JSON.parse(await AsyncStorage.getItem('rssitems'))
+                }
+            } catch (err) {
+                console.error(err)
+            }
+        }
 
-            this.setState({
-                // shuffle and take top 50 articles
-                rssLinks: [].concat(...rssitems)
-                            .filter(e => e != null && e["image"])
-                            .sort( () => Math.random() - 0.5 )
-                            .slice(0, 50)
-            })
-        })
-        .catch((err) => {
+        cachedRss()
+        .then(rssitems => {
+            console.log(rssitems)
+            console.log("Get cached storage completed!")
+            if (rssitems) {
+                this.setState({
+                    // shuffle and take top 30 articles
+                    rssLinks: [].concat(...rssitems)
+                                .filter(e => e != null && e["image"])
+                                .sort( () => Math.random() - 0.5 )
+                                .slice(0, 30)
+                })
+            } else {
+                Promise
+                .all(feeds.map(this.getArticles))
+                .then((rssitems) => {
+                //     console.log(feeds)
+                //     console.log("All done!")
+                //     console.log(rssitems.length + " articles fetched")
+
+                    let cachedRss = async () => {
+                        try {
+                            await AsyncStorage.setItem('rsstime', (new Date()).getTime().toString());
+                            await AsyncStorage.setItem('rssitems', JSON.stringify(rssitems));
+                        } catch (err) {
+                            console.error(err)
+                        }
+                    }
+                    cachedRss()
+                    .then( () => {
+                        console.log("AsyncStorage.setItem completed")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+
+                    this.setState({
+                        // shuffle and take top 30 articles
+                        rssLinks: [].concat(...rssitems)
+                                    .filter(e => e != null && e["image"])
+                                    .sort( () => Math.random() - 0.5 )
+                                    .slice(0, 30)
+                    })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+            }
+        }).catch((err) => {
             console.log(err)
         })
+
+
     }
 
     getArticles = url =>
