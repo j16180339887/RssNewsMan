@@ -24,14 +24,6 @@ export default class Setting extends React.Component {
     }
 
     componentDidMount() {
-        this._loadInitState().done()
-    }
-
-    _loadInitState = async () => {
-        let rssFeeds = await AsyncStorage.getItem("rssFeeds");
-        if (rssFeeds !== null) {
-            this.props.navigation.navigate("Profile");
-        }
     }
 
     addNewFeed = () => {
@@ -40,8 +32,8 @@ export default class Setting extends React.Component {
             { link: "https://www.infoq.cn/feed" },
             { link: "https://www.gamebase.com.tw/news/rss/0" },
             { link: "https://www.ithome.com.tw/rss" },
-            { link: "http://www.oschina.net/news/rss" },
             { link: "https://mshibanami.github.io/GitHubTrendingRSS/weekly/all.xml" },
+            { link: "http://www.oschina.net/news/rss" },
             // {link: "https://technews.tw/tn-rss/"},
             // {link: "https://feeds.feedburner.com/pcadv"},
             // {link: "https://feeds.feedburner.com/cool3c-show"},
@@ -158,9 +150,20 @@ export default class Setting extends React.Component {
             .then((responseData) => {
                 console.log("====================responseData=======================")
                 // console.log(responseData)
-                let meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)[0]
+                if (!responseData) {
+                    return {}
+                }
+                let meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)
+                if (!meta || !meta[0]) {
+                    meta = /<img\b[^>]+?src\s*=\s*['"]?([^\s'"?#>]+)/.exec(responseData)
+                }
+                meta = meta[0]
                 if (meta) {
-                    rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta)[0].replace(/&amp;/g, '&')
+                    let img = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta)
+                    if (!img[0]) {
+                        return {}
+                    }
+                    rssitem["image"] = img[0].replace(/&amp;/g, '&')
                     // console.log(rssitem["links"][0]["url"])
                     // console.log(rssitem["image"])
                     // console.log(rssitem)
