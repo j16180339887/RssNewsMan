@@ -28,7 +28,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yourcompany.rssnewsman"
-    },
-    "sdkVersion": "37.0.0"
+    }
   }
 }
