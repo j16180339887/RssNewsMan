@@ -204,17 +204,6 @@ export default class Setting extends React.Component {
                     </ScrollView>
                 </View>
         )
-        return (
-            <KeyboardAvoidingView behavior="padding" style={styles.wrapper}>
-                <View style={styles.container}>
-                    <Text style={styles.blueText} >app!</Text>
-                    <TextInput style={styles.textInput} placeholder="Input rss" onChangeText={ (rssFeeds) => this.setState({rssFeeds}) } />
-                    <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
-                    <Text>☰   ↻   ↺   ⌕  ⌖</Text>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
-          )
     }
 }
 

@@ -8,7 +8,7 @@ import {
 // import {
 //     createStackNavigator
 // } from "react-navigation";
-import Setting from "./src/Setting.js";
+import Setting from "./src/Setting.jsx";
 
 // const SettingPage = createStackNavigator({
 //     Profile: {
