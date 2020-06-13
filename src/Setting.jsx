@@ -37,11 +37,11 @@ export default class Setting extends React.Component {
     addNewFeed = () => {
 
         let feeds = [
-            {link: "https://www.infoq.cn/feed"},
-            {link: "https://www.gamebase.com.tw/news/rss/0"},
-            {link: "https://www.ithome.com.tw/rss"},
-            {link: "http://www.oschina.net/news/rss"},
-            {link: "https://mshibanami.github.io/GitHubTrendingRSS/weekly/all.xml"},
+            { link: "https://www.infoq.cn/feed" },
+            { link: "https://www.gamebase.com.tw/news/rss/0" },
+            { link: "https://www.ithome.com.tw/rss" },
+            { link: "http://www.oschina.net/news/rss" },
+            { link: "https://mshibanami.github.io/GitHubTrendingRSS/weekly/all.xml" },
             // {link: "https://technews.tw/tn-rss/"},
             // {link: "https://feeds.feedburner.com/pcadv"},
             // {link: "https://feeds.feedburner.com/cool3c-show"},
@@ -69,7 +69,7 @@ export default class Setting extends React.Component {
             try {
                 let rsstime = await AsyncStorage.getItem('rsstime')
                 // cache an hour of news
-                if (rsstime && (new Date()).getTime() - parseInt(rsstime) < 3600000 ) {
+                if (rsstime && (new Date()).getTime() - parseInt(rsstime) < 3600000) {
                     return JSON.parse(await AsyncStorage.getItem('rssitems'))
                 }
             } catch (err) {
@@ -78,131 +78,131 @@ export default class Setting extends React.Component {
         }
 
         cachedRss()
-        .then(rssitems => {
-            console.log(rssitems)
-            console.log("Get cached storage completed!")
-            if (rssitems) {
-                this.setState({
-                    // shuffle and take top 30 articles
-                    rssLinks: [].concat(...rssitems)
-                                .filter(e => e != null && e["image"])
-                                .sort( () => Math.random() - 0.5 )
-                                .slice(0, 30)
-                })
-            } else {
-                Promise
-                .all(feeds.map(this.getArticles))
-                .then((rssitems) => {
-                //     console.log(feeds)
-                //     console.log("All done!")
-                //     console.log(rssitems.length + " articles fetched")
-
-                    let cachedRss = async () => {
-                        try {
-                            await AsyncStorage.setItem('rsstime', (new Date()).getTime().toString());
-                            await AsyncStorage.setItem('rssitems', JSON.stringify(rssitems));
-                        } catch (err) {
-                            console.error(err)
-                        }
-                    }
-                    cachedRss()
-                    .then( () => {
-                        console.log("AsyncStorage.setItem completed")
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-
+            .then(rssitems => {
+                console.log(rssitems)
+                console.log("Get cached storage completed!")
+                if (rssitems) {
                     this.setState({
                         // shuffle and take top 30 articles
                         rssLinks: [].concat(...rssitems)
-                                    .filter(e => e != null && e["image"])
-                                    .sort( () => Math.random() - 0.5 )
-                                    .slice(0, 30)
+                            .filter(e => e != null && e["image"])
+                            .sort(() => Math.random() - 0.5)
+                            .slice(0, 30)
                     })
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
+                } else {
+                    Promise
+                        .all(feeds.map(this.getArticles))
+                        .then((rssitems) => {
+                            //     console.log(feeds)
+                            //     console.log("All done!")
+                            //     console.log(rssitems.length + " articles fetched")
+
+                            let cachedRss = async () => {
+                                try {
+                                    await AsyncStorage.setItem('rsstime', (new Date()).getTime().toString());
+                                    await AsyncStorage.setItem('rssitems', JSON.stringify(rssitems));
+                                } catch (err) {
+                                    console.error(err)
+                                }
+                            }
+                            cachedRss()
+                                .then(() => {
+                                    console.log("AsyncStorage.setItem completed")
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
+
+                            this.setState({
+                                // shuffle and take top 30 articles
+                                rssLinks: [].concat(...rssitems)
+                                    .filter(e => e != null && e["image"])
+                                    .sort(() => Math.random() - 0.5)
+                                    .slice(0, 30)
+                            })
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
 
 
     }
 
     getArticles = url =>
         fetch(url["link"])
-        .then((response) => response.text())
-        .then((responseData) => rssParser.parse(responseData))
-        .then((rss) =>
-            Promise
-            .all(rss.items.map(this.getImageUrl))
-            .then((rssitem) => {
-                if (rssitem.filter(e => e["error"]).length > 0) {
-                    url["available"] = false
-                }
-                return rssitem
+            .then((response) => response.text())
+            .then((responseData) => rssParser.parse(responseData))
+            .then((rss) =>
+                Promise
+                    .all(rss.items.map(this.getImageUrl))
+                    .then((rssitem) => {
+                        if (rssitem.filter(e => e["error"]).length > 0) {
+                            url["available"] = false
+                        }
+                        return rssitem
+                    })
+            )
+            .catch((err) => {
+                console.log(err)
+                url["available"] = false
             })
-        )
-        .catch((err) => {
-            console.log(err)
-            url["available"] = false
-        })
 
 
     getImageUrl = rssitem =>
         fetch(rssitem["links"][0]["url"])
-        .then((response) => response.text())
-        .then((responseData) => {
-            console.log("====================responseData=======================")
-            // console.log(responseData)
-            let meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)[0]
-            if (meta) {
-                rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta)[0].replace(/&amp;/g, '&')
-                // console.log(rssitem["links"][0]["url"])
-                // console.log(rssitem["image"])
-                // console.log(rssitem)
-                console.log("====================END=======================")
+            .then((response) => response.text())
+            .then((responseData) => {
+                console.log("====================responseData=======================")
+                // console.log(responseData)
+                let meta = /<meta[^<]*og:image[^<]*>/.exec(responseData)[0]
+                if (meta) {
+                    rssitem["image"] = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta)[0].replace(/&amp;/g, '&')
+                    // console.log(rssitem["links"][0]["url"])
+                    // console.log(rssitem["image"])
+                    // console.log(rssitem)
+                    console.log("====================END=======================")
+                    return rssitem
+                }
+                return {}
+            })
+            .catch((err) => {
+                console.log(err)
+                rssitem["error"] = true
                 return rssitem
-            }
-            return {}
-        })
-        .catch((err) => {
-            console.log(err)
-            rssitem["error"] = true
-            return rssitem
-        })
+            })
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent:'center', alignItems: 'center', width: '100%', backgroundColor: "#333"}}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', backgroundColor: "#333" }}>
                 <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
                     <Text>Fetch news</Text>
                 </TouchableOpacity>
                 <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent} removeclippedsubviews={true}>
-                    { this.state.rssLinks.map((rssLink, i) => {
+                    {this.state.rssLinks.map((rssLink, i) => {
                         console.log({
                             link: rssLink["links"][0]["url"],
                             img: rssLink["image"],
                             title: rssLink["title"]
                         })
                         return (
-                            <View key={i} style={{width: '98%', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flex: 1, alignSelf: 'center'}}>
-                            <View style={{backgroundColor: 'rgba(0,0,0,0.6)', flex: 1}} >
-                                <Image source={{uri: rssLink["image"]}} style={styles.img} contentContainerStyle={{flexGrow: 1}}/>
-                            </View>
+                            <View key={i} style={{ width: '98%', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flex: 1, alignSelf: 'center' }}>
+                                <View style={{ backgroundColor: 'rgba(0,0,0,0.6)', flex: 1 }} >
+                                    <Image source={{ uri: rssLink["image"] }} style={styles.img} contentContainerStyle={{ flexGrow: 1 }} />
+                                </View>
                                 <TouchableOpacity
-                                    style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start'}}
-                                    onPress={()=> Clipboard.setString(rssLink["links"][0]["url"])} >
-                                        <Text style={styles.imgText}>{rssLink["title"]}</Text>
+                                    style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'flex-start' }}
+                                    onPress={() => Clipboard.setString(rssLink["links"][0]["url"])} >
+                                    <Text style={styles.imgText}>{rssLink["title"]}</Text>
                                 </TouchableOpacity>
                             </View>
                         )
-                    }) }
-                    </ScrollView>
-                </View>
+                    })}
+                </ScrollView>
+            </View>
         )
     }
 }

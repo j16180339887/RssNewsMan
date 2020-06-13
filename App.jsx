@@ -33,7 +33,7 @@ import Setting from "./src/Setting.jsx";
 
 export default class App extends React.Component {
     render() {
-        return ( <Setting /> );
+        return (<Setting />);
     }
 }
 
