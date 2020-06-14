@@ -5,21 +5,22 @@ import {
     View,
     ScrollView,
     Image,
-    TextInput,
-    KeyboardAvoidingView,
     TouchableOpacity,
     Clipboard,
     AsyncStorage
 } from 'react-native';
 
 import * as rssParser from 'react-native-rss-parser';
+import { ProgressBar, Colors } from 'react-native-paper';
 
 export default class Setting extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            rssLinks: []
+            feeds: [],
+            rssLinks: [],
+            progress: 0
         }
     }
 
@@ -28,34 +29,35 @@ export default class Setting extends React.Component {
 
     addNewFeed = () => {
 
-        let feeds = [
-            { link: "https://www.infoq.cn/feed" },
-            { link: "https://www.gamebase.com.tw/news/rss/0" },
-            { link: "https://www.ithome.com.tw/rss" },
-            { link: "https://mshibanami.github.io/GitHubTrendingRSS/weekly/all.xml" },
-            { link: "http://www.oschina.net/news/rss" },
-            // {link: "https://technews.tw/tn-rss/"},
-            // {link: "https://feeds.feedburner.com/pcadv"},
-            // {link: "https://feeds.feedburner.com/cool3c-show"},
-            // {link: "https://www.ithome.com.tw/rss"},
-            // {link: "https://www.kocpc.com.tw/feed"},
-            // {link: "http://techcrunch.cn/feed"},
-            // {link: "http://www.azofreeware.com/feeds/posts/default"},
-            // {link: "http://www.oschina.net/news/rss"},
-            // {link: "https://linux.cn/rss.xml"},
-            // {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
-            // {link: "https://feeds.feedburner.com/d0od"},
-            // {link: "https://www.phoronix.com/rss.php"},
-            // {link: "https://feeds.feedburner.com/engadget"},
-            // {link: "https://feeds.feedburner.com/TechCrunch"},
-            // {link: "https://opensource.com/feed"},
-            // {link: "https://feeds.feedburner.com/linuxtoday/linux"}
-        ].map(feed => {
-            feed["available"] = true
-            return feed
+        this.setState({
+            progress: 0,
+            feeds: [
+                { link: "https://www.infoq.cn/feed" },
+                { link: "https://www.gamebase.com.tw/news/rss/0" },
+                { link: "https://www.ithome.com.tw/rss" },
+                { link: "https://mshibanami.github.io/GitHubTrendingRSS/weekly/all.xml" },
+                { link: "http://www.oschina.net/news/rss" },
+                // {link: "https://technews.tw/tn-rss/"},
+                // {link: "https://feeds.feedburner.com/pcadv"},
+                // {link: "https://feeds.feedburner.com/cool3c-show"},
+                // {link: "https://www.ithome.com.tw/rss"},
+                // {link: "https://www.kocpc.com.tw/feed"},
+                // {link: "http://techcrunch.cn/feed"},
+                // {link: "http://www.azofreeware.com/feeds/posts/default"},
+                // {link: "http://www.oschina.net/news/rss"},
+                // {link: "https://linux.cn/rss.xml"},
+                // {link: "http://feeds.bbci.co.uk/zhongwen/trad/rss.xml"},
+                // {link: "https://feeds.feedburner.com/d0od"},
+                // {link: "https://www.phoronix.com/rss.php"},
+                // {link: "https://feeds.feedburner.com/engadget"},
+                // {link: "https://feeds.feedburner.com/TechCrunch"},
+                // {link: "https://opensource.com/feed"},
+                // {link: "https://feeds.feedburner.com/linuxtoday/linux"}
+            ].map(feed => {
+                feed["available"] = true
+                return feed
+            })
         })
-
-        console.log(feeds)
 
         let cachedRss = async () => {
             try {
@@ -75,6 +77,7 @@ export default class Setting extends React.Component {
                 console.log("Get cached storage completed!")
                 if (rssitems) {
                     this.setState({
+                        progress: this.state.feeds.length,
                         // shuffle and take top 30 articles
                         rssLinks: [].concat(...rssitems)
                             .filter(e => e != null && e["image"])
@@ -83,7 +86,7 @@ export default class Setting extends React.Component {
                     })
                 } else {
                     Promise
-                        .all(feeds.map(this.getArticles))
+                        .all(this.state.feeds.map(this.getArticles))
                         .then((rssitems) => {
                             //     console.log(feeds)
                             //     console.log("All done!")
@@ -135,6 +138,11 @@ export default class Setting extends React.Component {
                         if (rssitem.filter(e => e["error"]).length > 0) {
                             url["available"] = false
                         }
+                        this.setState({
+                            progress: ++this.state.progress
+                        })
+                        console.log("this.state.progress/this.state.feeds.length")
+                        console.log(this.state.progress/this.state.feeds.length)
                         return rssitem
                     })
             )
@@ -157,9 +165,9 @@ export default class Setting extends React.Component {
                 if (!meta || !meta[0]) {
                     meta = /<img\b[^>]+?src\s*=\s*['"]?([^\s'"?#>]+)/.exec(responseData)
                 }
-                meta = meta[0]
-                if (meta) {
-                    let img = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(meta)
+                let metaStr = meta[0]
+                if (metaStr) {
+                    let img = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i.exec(metaStr)
                     if (!img[0]) {
                         return {}
                     }
@@ -180,10 +188,12 @@ export default class Setting extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', backgroundColor: "#333" }}>
+            // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', backgroundColor: "#333" }}>
+            <View style={{ flex: 1, width: '100%', backgroundColor: "#333" }}>
                 <TouchableOpacity style={styles.btn} onPress={this.addNewFeed}>
                     <Text>Fetch news</Text>
                 </TouchableOpacity>
+                <ProgressBar progress={this.state.progress/this.state.feeds.length} color={Colors.blueA700} style={{ width: '100%' }} />
                 <ScrollView style={styles.scrollview} contentContainerStyle={styles.scrollviewContent} removeclippedsubviews={true}>
                     {this.state.rssLinks.map((rssLink, i) => {
                         console.log({
